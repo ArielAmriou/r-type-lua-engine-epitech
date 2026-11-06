@@ -30,6 +30,10 @@
         "title": "Open lua project"
       },
       {
+        "command": "r-type-lua-engine-epitech.openDoc",
+        "title": "Open Lua scripting guide"
+      },
+      {
         "command": "r-type-lua-engine-epitech.runGame",
         "title": "Run lua game",
         "icon": {
@@ -67,7 +71,7 @@
     "viewsWelcome": [
       {
         "view": "luaEngine.actions",
-        "contents": "Make Lua games with the R-Type engine.\n\nEngine\n[Install engine](command:r-type-lua-engine-epitech.installEngine)\n[Update engine](command:r-type-lua-engine-epitech.updateEngine)\nProjects\n[Create project](command:r-type-lua-engine-epitech.createProject)\n[Open project](command:r-type-lua-engine-epitech.openProject)\n[Run game](command:r-type-lua-engine-epitech.runGame)"
+        "contents": "Make Lua games with the R-Type engine.\n\nEngine\n[Install engine](command:r-type-lua-engine-epitech.installEngine)\n[Update engine](command:r-type-lua-engine-epitech.updateEngine)\nProjects\n[Create project](command:r-type-lua-engine-epitech.createProject)\n[Open project](command:r-type-lua-engine-epitech.openProject)\n[Run game](command:r-type-lua-engine-epitech.runGame)\nHelp\n[Lua scripting guide](command:r-type-lua-engine-epitech.openDoc)"
       }
     ]
   },

@@ -151,12 +151,17 @@ export function activate(context: vscode.ExtensionContext) {
 		);
 	});
 
+	const openDoc = vscode.commands.registerCommand('r-type-lua-engine-epitech.openDoc', () => {
+		vscode.env.openExternal(vscode.Uri.parse('https://github.com/pierrick-simon/R-Type/wiki/Lua-Scripting-Guide'));
+	});
+
 	context.subscriptions.push(logs);
 	context.subscriptions.push(install);
 	context.subscriptions.push(update);
 	context.subscriptions.push(createProject);
 	context.subscriptions.push(openProject);
 	context.subscriptions.push(runGame);
+	context.subscriptions.push(openDoc);
     
 }
 
