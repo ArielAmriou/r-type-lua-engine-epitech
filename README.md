@@ -1,71 +1,107 @@
-# r-type-lua-engine-epitech README
+# R-Type Lua Engine
 
-This is the README for your extension "r-type-lua-engine-epitech". After writing up a brief description, we recommend including the following sections.
+A VS Code extension to install the [R-Type](https://github.com/pierrick-simon/R-Type) engine and to create, open and run Lua games made with it, without leaving the editor.
 
 ## Features
 
-Describe specific features of your extension including screenshots of your extension in action. Image paths are relative to this README file.
+- **Install / update the engine**: clones, builds and installs the engine in `~/.local` (no `sudo` needed).
+- **Create a project**: generates a ready-to-run Lua project, and can initialize a git repository for it.
+- **Open a project**: pick one of your projects from a list.
+- **Run the game**: launches the game of the open project, with its output shown in VS Code.
 
-For example if there is an image subfolder under your extension project workspace:
-
-\!\[feature X\]\(images/feature-x.png\)
-
-> Tip: Many popular extensions utilize animations. This is an excellent way to show off your extension! We recommend short, focused animations that are easy to follow.
+Everything is available from:
+- the **Lua Engine** icon in the left sidebar,
+- the **▶ button** at the top right of the editor (run game),
+- the Command Palette (`Ctrl+Shift+P`).
 
 ## Requirements
 
-If you have any requirements or dependencies, add a section describing those and how to install and configure them.
+- Linux
+- `git`, with SSH access to `git@github.com:pierrick-simon/R-Type.git`
+- `cmake` and a C++ compiler (`g++` or `clang++`)
+- VS Code 1.143 or newer
 
-## Extension Settings
+## Commands
 
-Include if your extension adds any VS Code settings through the `contributes.configuration` extension point.
+| Command | What it does |
+|---|---|
+| **Install engine** | Clones the engine into `/tmp/R-Type`, builds it in Release and installs it in `~/.local`. Also adds `~/.local/lib` to `LD_LIBRARY_PATH` in `~/.bashrc` and `~/.zshrc`. |
+| **Update engine** | Pulls the latest engine sources in `/tmp/R-Type`, then rebuilds and reinstalls it. |
+| **Create lua project** | Asks for a name, creates the project in `~/Documents/LuaEngineProjects/<name>`, optionally runs `git init`, then opens it. |
+| **Open lua project** | Lists the projects in `~/Documents/LuaEngineProjects` and opens the one you pick. |
+| **Run lua game** | Copies the installed engine into the open project as `./<name>`, then runs it. |
 
-For example:
+Command output (build logs, game logs, errors) is shown in the **Output** panel, channel **R-Type Engine**.
 
-This extension contributes the following settings:
+## Project layout
 
-* `myExtension.enable`: Enable/disable this extension.
-* `myExtension.thing`: Set to `blah` to do something.
+A project created by the extension looks like this:
 
-## Known Issues
+```
+~/Documents/LuaEngineProjects/<name>/
+├── <name>          # game binary (copy of the engine, not versioned)
+├── config.conf     # window and engine settings
+├── src/
+│   └── game.lua    # your game code
+└── .gitignore      # only if git init was chosen; ignores <name>
+```
 
-Calling out known issues can help limit users opening duplicate issues against your extension.
+**`config.conf`**
 
-## Release Notes
+```
+windowFPS = 60
+windowWidth = 800
+windowHeight = 600
+windowName = MyGame
+srcDirectory = src
+modules = Window, Keyboard, Mouse
+```
 
-Users appreciate release notes as you update your extension.
+**`src/game.lua`** — `start` is called once by the engine. It registers an `update` system, called every frame, which stops the game when the window is closed.
 
-### 1.0.0
+```lua
+local function update(gm)
+    if gm:windowShouldClose() then
+        gm:stop()
+    end
+end
 
-Initial release of ...
+function start(gm)
+    gm:createSystem(update)
+end
+```
 
-### 1.0.1
+## Working on a project with others
 
-Fixed issue #.
+The game binary is not committed (it is in `.gitignore`). To work on a cloned project:
 
-### 1.1.0
+1. Run **Install engine** once.
+2. Clone the project into `~/Documents/LuaEngineProjects/`, keeping the project name as the folder name.
+3. Open it and click **Run game**: the binary is copied from the installed engine before each run.
 
-Added features X, Y, and Z.
+This also means every project always runs the latest installed version of the engine.
 
----
+## Troubleshooting
 
-## Following extension guidelines
+**`error while loading shared libraries: libengine-*.so`**
+The engine libraries are in `~/.local/lib`. Reinstall the engine with the extension (it sets the library path in the binary), or open a new terminal so that `LD_LIBRARY_PATH` from `~/.bashrc` / `~/.zshrc` is loaded.
 
-Ensure that you've read through the extensions guidelines and follow the best practices for creating your extension.
+**Update engine fails with `cd: /tmp/R-Type: No such file or directory`**
+`/tmp` is cleared when the computer restarts. Run **Install engine** again.
 
-* [Extension Guidelines](https://code.visualstudio.com/api/references/extension-guidelines)
+**Run game says "Open a project located in ..."**
+The open folder must be inside `~/Documents/LuaEngineProjects/`.
 
-## Working with Markdown
+**Create project fails with `ENOENT ... .local/bin/game`**
+The engine is not installed. Run **Install engine** first.
 
-You can author your README using Visual Studio Code. Here are some useful editor keyboard shortcuts:
+## Development
 
-* Split the editor (`Cmd+\` on macOS or `Ctrl+\` on Windows and Linux).
-* Toggle preview (`Shift+Cmd+V` on macOS or `Shift+Ctrl+V` on Windows and Linux).
-* Press `Ctrl+Space` (Windows, Linux, macOS) to see a list of Markdown snippets.
+```sh
+npm install
+npm run compile   # type-check, lint and build into dist/
+```
 
-## For more information
+Press **F5** in VS Code to open an *Extension Development Host* window with the extension loaded. Restart it after changing `package.json`.
 
-* [Visual Studio Code's Markdown Support](http://code.visualstudio.com/docs/languages/markdown)
-* [Markdown Syntax Reference](https://help.github.com/articles/markdown-basics/)
-
-**Enjoy!**
+The whole extension is in [src/extension.ts](src/extension.ts); commands, sidebar and buttons are declared in [package.json](package.json).
