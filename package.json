@@ -1,8 +1,15 @@
 {
   "name": "r-type-lua-engine-epitech",
   "displayName": "R-Type lua engine epitech",
-  "description": "",
+  "description": "Install the R-Type engine and create, open and run Lua games from VS Code.",
   "version": "0.0.1",
+  "publisher": "ariel-amriou",
+  "license": "MIT",
+  "icon": "icons/icon.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ArielAmriou/r-type-lua-engine-epitech"
+  },
   "engines": {
     "vscode": "^1.143.0"
   },

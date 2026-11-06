@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <!-- Background -->
+  <rect width="256" height="256" rx="48" fill="#1E1B4B"/>
+
+  <!-- Stars -->
+  <circle cx="44" cy="52" r="3" fill="#C7D2FE"/>
+  <circle cx="96" cy="34" r="2" fill="#C7D2FE"/>
+  <circle cx="214" cy="200" r="3" fill="#C7D2FE"/>
+  <circle cx="40" cy="206" r="2" fill="#C7D2FE"/>
+  <circle cx="130" cy="214" r="2" fill="#C7D2FE"/>
+
+  <!-- Moon (Lua) -->
+  <path d="M179.8,38.6 A32,32 0 1,0 216.1,80.9 A28,28 0 0,1 179.8,38.6 Z" fill="#FBBF24"/>
+
+  <!-- Engine flame -->
+  <polygon points="62,116 30,136 62,156" fill="#F97316"/>
+  <polygon points="62,124 44,136 62,148" fill="#FDE047"/>
+
+  <!-- Ship -->
+  <polygon points="56,100 168,136 56,172 80,136" fill="#E0E7FF"/>
+  <polygon points="56,100 120,120 92,136 80,136" fill="#A5B4FC"/>
+  <circle cx="118" cy="136" r="10" fill="#38BDF8"/>
+
+  <!-- Shots -->
+  <rect x="184" y="132" width="22" height="8" rx="4" fill="#FBBF24"/>
+  <rect x="218" y="132" width="14" height="8" rx="4" fill="#FBBF24"/>
+</svg>
