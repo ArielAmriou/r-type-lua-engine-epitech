@@ -156,6 +156,14 @@ export function activate(context: vscode.ExtensionContext) {
 		}
 
 		const name: string = path.basename(projectDir);
+		const debugMode: boolean = context.globalState.get('debugMode', false);
+
+		if (debugMode) {
+			const terminal = vscode.window.createTerminal({ name: `${name} (debug)`, cwd: projectDir });
+			terminal.show();
+			terminal.sendText(`cp ${getGameBinary(context)} ./${name} && ./${name}`);
+			return;
+		}
 
 		runCommand(`
 			cd ${projectDir} &&
