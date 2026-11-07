@@ -42,6 +42,16 @@ function runCommand(command: string, startMessage: string, successMessage: strin
 	child.stderr?.on('data', (data) => logs.append(data));
 }
 
+function getGameBinary(context: vscode.ExtensionContext): string {
+	const home: string = os.homedir();
+	const debugMode: boolean = context.globalState.get('debugMode', false);
+
+	if (debugMode) {
+		return `${home}/.local/bin/game-debug`;
+	}
+	return `${home}/.local/bin/game`;
+}
+
 export function activate(context: vscode.ExtensionContext) {
 	const home: string = os.homedir();
 
@@ -53,6 +63,9 @@ export function activate(context: vscode.ExtensionContext) {
 			cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build -j &&
 			cmake --install build --prefix ${home}/.local &&
+			cmake -B build-debug -DCMAKE_CXX_FLAGS="-D__DEBUG__" -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
+			cmake --build build-debug -j --target game &&
+			cp Games/game ${home}/.local/bin/game-debug &&
 			touch ~/.bashrc ~/.zshrc &&
 			(grep -qF '.local/lib' ~/.bashrc || echo 'export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc) &&
 			(grep -qF '.local/lib' ~/.zshrc || echo 'export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH' >> ~/.zshrc) &&
@@ -67,10 +80,13 @@ export function activate(context: vscode.ExtensionContext) {
 		runCommand(`
 			cd /tmp/R-Type &&
 			git pull &&
-			rm -rf build &&
+			rm -rf build build-debug &&
 			cmake -S . -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build -j &&
 			cmake --install build --prefix ${home}/.local &&
+			cmake -B build-debug -DCMAKE_CXX_FLAGS="-D__DEBUG__" -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
+			cmake --build build-debug -j --target game &&
+			cp Games/game ${home}/.local/bin/game-debug &&
 			echo "Update complete!"
 			`,
 			'Updating R-Type engine...',
@@ -93,7 +109,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		try {
 			fs.mkdirSync(`${projectDir}/src`, { recursive: true });
-			fs.copyFileSync(`${home}/.local/bin/game`, `${projectDir}/${name}`);
+			fs.copyFileSync(getGameBinary(context), `${projectDir}/${name}`);
 			fs.writeFileSync(`${projectDir}/config.conf`, basicConf);
 			fs.writeFileSync(`${projectDir}/src/game.lua`, basicLua);
 		} catch (error) {
@@ -143,7 +159,7 @@ export function activate(context: vscode.ExtensionContext) {
 
 		runCommand(`
 			cd ${projectDir} &&
-			cp ${home}/.local/bin/game ./${name} &&
+			cp ${getGameBinary(context)} ./${name} &&
 			./${name}
 			`,
 			`Launching ${name}...`,
@@ -155,6 +171,17 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.env.openExternal(vscode.Uri.parse('https://github.com/pierrick-simon/R-Type/wiki/Lua-Scripting-Guide'));
 	});
 
+	const toggleDebug = vscode.commands.registerCommand('r-type-lua-engine-epitech.toggleDebug', () => {
+		const debugMode: boolean = context.globalState.get('debugMode', false);
+
+		context.globalState.update('debugMode', !debugMode);
+		if (debugMode) {
+			vscode.window.showInformationMessage('Debug mode disabled');
+		} else {
+			vscode.window.showInformationMessage('Debug mode enabled');
+		}
+	});
+
 	context.subscriptions.push(logs);
 	context.subscriptions.push(install);
 	context.subscriptions.push(update);
@@ -162,6 +189,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(openProject);
 	context.subscriptions.push(runGame);
 	context.subscriptions.push(openDoc);
+	context.subscriptions.push(toggleDebug);
     
 }
 
