@@ -16,10 +16,22 @@ Everything is available from:
 
 ## Requirements
 
-- Linux
+- Linux (any distribution)
 - `git`, with SSH access to `git@github.com:pierrick-simon/R-Type.git`
-- `cmake` and a C++ compiler (`g++` or `clang++`)
+- `cmake` 3.25 or newer and a C/C++ compiler (`gcc`/`g++` or `clang`/`clang++`)
+- The X11 and OpenGL development packages (needed to build raylib)
 - VS Code 1.143 or newer
+
+Install them with your package manager:
+
+| Distribution | Command |
+|---|---|
+| Ubuntu / Debian | `sudo apt install git cmake build-essential libx11-dev libxrandr-dev libxinerama-dev libxcursor-dev libxi-dev libgl1-mesa-dev` |
+| Fedora | `sudo dnf install git cmake gcc gcc-c++ libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel mesa-libGL-devel` |
+| Arch / Manjaro | `sudo pacman -S --needed git cmake base-devel libx11 libxrandr libxinerama libxcursor libxi mesa` |
+| openSUSE | `sudo zypper install git cmake gcc gcc-c++ libX11-devel libXrandr-devel libXinerama-devel libXcursor-devel libXi-devel Mesa-libGL-devel` |
+
+Ubuntu 22.04 and older ship a `cmake` that is too old: install a recent one with `sudo snap install cmake --classic` or `pip install --user cmake`.
 
 ## Commands
 

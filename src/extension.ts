@@ -60,11 +60,12 @@ export function activate(context: vscode.ExtensionContext) {
 			rm -rf /tmp/R-Type &&
 			git clone git@github.com:pierrick-simon/R-Type.git /tmp/R-Type &&
 			cd /tmp/R-Type &&
-			cmake -S Engine -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
+			cmake -S Engine -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build -j &&
 			cmake --install build --prefix ${home}/.local &&
 			cmake -S Engine -B build-debug -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/tmp/R-Type/build-debug/bin -DCMAKE_CXX_FLAGS="-D__DEBUG__" -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build-debug -j --target game &&
+			mkdir -p ${home}/.local/bin &&
 			cp build-debug/bin/game ${home}/.local/bin/game-debug &&
 			touch ~/.bashrc ~/.zshrc &&
 			(grep -qF '.local/lib' ~/.bashrc || echo 'export LD_LIBRARY_PATH=$HOME/.local/lib:$LD_LIBRARY_PATH' >> ~/.bashrc) &&
@@ -81,11 +82,12 @@ export function activate(context: vscode.ExtensionContext) {
 			cd /tmp/R-Type &&
 			git pull &&
 			rm -rf build build-debug &&
-			cmake -S Engine -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
+			cmake -S Engine -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_LIBDIR=lib -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build -j &&
 			cmake --install build --prefix ${home}/.local &&
 			cmake -S Engine -B build-debug -DCMAKE_RUNTIME_OUTPUT_DIRECTORY=/tmp/R-Type/build-debug/bin -DCMAKE_CXX_FLAGS="-D__DEBUG__" -DCMAKE_INSTALL_RPATH=${home}/.local/lib &&
 			cmake --build build-debug -j --target game &&
+			mkdir -p ${home}/.local/bin &&
 			cp build-debug/bin/game ${home}/.local/bin/game-debug &&
 			echo "Update complete!"
 			`,
