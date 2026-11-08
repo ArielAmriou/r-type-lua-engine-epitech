@@ -8,6 +8,7 @@ A VS Code extension to install the [R-Type](https://github.com/pierrick-simon/R-
 - **Create a project**: generates a ready-to-run Lua project, and can initialize a git repository for it.
 - **Open a project**: pick one of your projects from a list.
 - **Run the game**: launches the game of the open project, with its output shown in VS Code.
+- **Lua autocompletion**: in `.lua` files, completes the engine's API with its documentation: the `gm:` functions, the keyboard, mouse, `Clock` and `Sound` methods, the component and system names in strings, the fields of a component in `addComponent`'s table, and the `Key`, `MouseButton`, `SoundState` and `Attenuation` values.
 
 Everything is available from:
 - the **Lua Engine** icon in the left sidebar,

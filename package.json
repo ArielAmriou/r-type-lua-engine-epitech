@@ -16,9 +16,18 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onLanguage:lua"
+  ],
   "main": "./dist/extension.js",
   "contributes": {
+    "configurationDefaults": {
+      "[lua]": {
+        "editor.quickSuggestions": {
+          "strings": "on"
+        }
+      }
+    },
     "commands": [
       {
         "command": "r-type-lua-engine-epitech.installEngine",

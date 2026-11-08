@@ -3,6 +3,7 @@ import { exec, execSync } from 'child_process';
 import * as fs from 'fs';
 import * as os from 'os';
 import * as path from 'path';
+import { registerLuaCompletion } from './completion';
 
 const basicConf: string = `windowFPS = 60
 windowWidth = 800
@@ -200,7 +201,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(runGame);
 	context.subscriptions.push(openDoc);
 	context.subscriptions.push(toggleDebug);
-    
+
+	registerLuaCompletion(context);
 }
 
 export function deactivate() {}
